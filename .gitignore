@@ -1,0 +1,7 @@
+.DS_Store
+
+# Artifacts
+Package.resolved
+.build/
+.swiftpm/
+.vscode/
