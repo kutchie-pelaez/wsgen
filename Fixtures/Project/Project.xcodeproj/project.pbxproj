@@ -3,11 +3,11 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 55;
+	objectVersion = 50;
 	objects = {
 
 /* Begin PBXGroup section */
-		2CCF04B0269E557800528D7D = {
+		2CDE5BF2269E5E4D004E60E5 = {
 			isa = PBXGroup;
 			children = (
 			);
@@ -16,21 +16,20 @@
 /* End PBXGroup section */
 
 /* Begin PBXProject section */
-		2CCF04B1269E557800528D7D /* Project object */ = {
+		2CDE5BF3269E5E4D004E60E5 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				BuildIndependentTargetsInParallel = 1;
-				LastUpgradeCheck = 1300;
+				LastUpgradeCheck = 1250;
 			};
-			buildConfigurationList = 2CCF04B4269E557800528D7D /* Build configuration list for PBXProject "Project" */;
-			compatibilityVersion = "Xcode 13.0";
+			buildConfigurationList = 2CDE5BF6269E5E4D004E60E5 /* Build configuration list for PBXProject "Project" */;
+			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 				Base,
 			);
-			mainGroup = 2CCF04B0269E557800528D7D;
+			mainGroup = 2CDE5BF2269E5E4D004E60E5;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -39,13 +38,13 @@
 /* End PBXProject section */
 
 /* Begin XCBuildConfiguration section */
-		2CCF04B5269E557800528D7D /* Debug */ = {
+		2CDE5BF7269E5E4D004E60E5 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 			};
 			name = Debug;
 		};
-		2CCF04B6269E557800528D7D /* Release */ = {
+		2CDE5BF8269E5E4D004E60E5 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 			};
@@ -54,16 +53,16 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		2CCF04B4269E557800528D7D /* Build configuration list for PBXProject "Project" */ = {
+		2CDE5BF6269E5E4D004E60E5 /* Build configuration list for PBXProject "Project" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				2CCF04B5269E557800528D7D /* Debug */,
-				2CCF04B6269E557800528D7D /* Release */,
+				2CDE5BF7269E5E4D004E60E5 /* Debug */,
+				2CDE5BF8269E5E4D004E60E5 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
-	rootObject = 2CCF04B1269E557800528D7D /* Project object */;
+	rootObject = 2CDE5BF3269E5E4D004E60E5 /* Project object */;
 }

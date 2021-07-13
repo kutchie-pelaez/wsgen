@@ -1,5 +1,5 @@
 .DS_Store
-Fixtures/Project.xcodeproj/project.xcworkspace/
+Fixtures/**/project.xcworkspace
 
 # Artifacts
 Package.resolved
