@@ -19,6 +19,7 @@ let products: [Product] = [
 
 let dependencies: [Package.Dependency] = [
     .package(url: "https://github.com/jpsim/Yams.git", from: "4.0.0"),
+    .package(url: "https://github.com/MaxDesiatov/XMLCoder.git", from: "0.12.0"),
     .package(url: "https://github.com/jakeheis/SwiftCLI.git", from: "6.0.0"),
     .package(url: "https://github.com/onevcat/Rainbow.git", .upToNextMajor(from: "4.0.0")),
     .package(url: "https://github.com/kylef/PathKit.git", from: "1.0.0")
@@ -42,7 +43,10 @@ let targets: [Target] = [
         ]
     ),
     .target(
-        name: "Core"
+        name: "Core",
+        dependencies: [
+            "XMLCoder"
+        ]
     ),
     .testTarget(
         name: "WorkspaceGenCLITests",
