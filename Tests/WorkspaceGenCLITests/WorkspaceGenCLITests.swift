@@ -42,8 +42,8 @@ final class WorkspaceGenCLITests: XCTestCase {
 
     func test2_checkGeneratedXCWorkspaceExistence() {
         XCTAssert(
-            !fixturesXCWorkspaceFolderPath.exists &&
-            !fixturesXCWorkspaceContentsFolderPath.exists
+            fixturesXCWorkspaceFolderPath.exists &&
+            fixturesXCWorkspaceContentsFolderPath.exists
         )
     }
 
