@@ -1,5 +1,6 @@
 .DS_Store
-Fixtures/**/project.xcworkspace
+Fixtures/**/project.xcworkspace/
+Fixtures/WorkspaceName.xcworkspace/
 
 # Artifacts
 Package.resolved

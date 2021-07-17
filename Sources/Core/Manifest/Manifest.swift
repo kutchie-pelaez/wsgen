@@ -160,6 +160,13 @@ extension Manifest: Decodable {
             }
         }
 
+        print("----------------")
+        for ref in fileRefs {
+            print("\(ref.location) is .\(ref.type)")
+        }
+        print(fileRefs.count)
+
+
         self.fileRefs = fileRefs
     }
 }
