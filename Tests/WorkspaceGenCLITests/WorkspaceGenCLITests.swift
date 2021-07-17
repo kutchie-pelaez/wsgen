@@ -37,18 +37,14 @@ final class WorkspaceGenCLITests: XCTestCase {
             ]
         )
 
-        if status != 0 {
-            XCTAssert(false)
-            clean()
-        }
+        XCTAssert(status == 0)
     }
 
     func test2_checkGeneratedXCWorkspaceExistence() {
-        if !fixturesXCWorkspaceFolderPath.exists &&
-           !fixturesXCWorkspaceContentsFolderPath.exists {
-            XCTAssert(false)
-            clean()
-        }
+        XCTAssert(
+            !fixturesXCWorkspaceFolderPath.exists &&
+            !fixturesXCWorkspaceContentsFolderPath.exists
+        )
     }
 
     func test3_verifyGeneratedXCWorkspaceStructure() {
@@ -60,23 +56,9 @@ final class WorkspaceGenCLITests: XCTestCase {
                 .fileRefs
                 .map { $0.name }
 
-            clean()
-
-            XCTAssert(
-                generatedXCWorkspaceItems == expectedXCWorkspaceItems
-            )
+            XCTAssert(generatedXCWorkspaceItems == expectedXCWorkspaceItems)
         } catch {
             XCTAssert(false)
-            clean()
         }
-    }
-}
-
-// MARK: - Private
-
-extension WorkspaceGenCLITests {
-
-    private func clean() {
-        try? fixturesXCWorkspaceFolderPath.delete()
     }
 }
