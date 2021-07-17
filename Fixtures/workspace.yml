@@ -1,29 +1,20 @@
 name: WorkspaceName
 
+# Order is reversed comparing to default for test purposes
 sorting:
-  - kind: projects
-    rule: ascending
-  - kind: folders
-    rule: ascending
-  - kind: files
-    rule: ascending
+  - file
+  - folder
+  - package
+  - project
 
 projects:
   - Project
 
-flatFolders:
-  - FlatFolder1
-  - path: FlatFolder2
-  - path: FlatFolder3
-    excluding:
-      - H
-      - I
-
 folders:
-  - J
-  - K
+  - path: Recursive
+    recursive: true
+  - Folder
+  - Package
 
 files:
-  - FileA
-  - FileB
-  - FileC
+  - File
