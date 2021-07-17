@@ -1,4 +1,6 @@
 import WorkspaceGenCLI
+import Foundation
 
 let cli = WorkspaceGenCLI()
-cli.execute()
+let status = cli.execute()
+exit(status)

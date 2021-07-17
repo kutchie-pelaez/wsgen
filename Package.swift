@@ -52,7 +52,9 @@ let targets: [Target] = [
     .testTarget(
         name: "WorkspaceGenCLITests",
         dependencies: [
-            "WorkspaceGenCLI"
+            "WorkspaceGenCLI",
+            "XMLCoder",
+            "PathKit"
         ]
     )
 ]

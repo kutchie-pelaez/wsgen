@@ -28,6 +28,7 @@ final class GenerateCommand {
 extension GenerateCommand: Command {
 
     func execute() throws {
+        MANIFEST_OUTPUT_PATH = output ?? Path.current.string
         executeNonThrowing()
     }
 

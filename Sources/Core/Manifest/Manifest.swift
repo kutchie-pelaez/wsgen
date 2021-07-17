@@ -1,5 +1,7 @@
 import PathKit
 
+public var MANIFEST_OUTPUT_PATH: String = Path.current.string
+
 public struct Manifest {
 
     public let name: String
@@ -75,7 +77,7 @@ extension Manifest: Decodable {
                 let type: FileRef.FileRefType
 
                 if folder.isRecursive {
-                    let children = (try? (Path.current + folder.path).children()) ?? []
+                    let children = (try? (Path(MANIFEST_OUTPUT_PATH) + folder.path).children()) ?? []
 
                     for child in children {
                         let childRelativePath = folder.path + "/" + child.lastComponent
@@ -98,7 +100,7 @@ extension Manifest: Decodable {
                 } else {
                     location = folder.path
 
-                    let folderPackagePath: Path = .current + folder.path + "Package.swift"
+                    let folderPackagePath: Path = Path(MANIFEST_OUTPUT_PATH) + folder.path + "Package.swift"
                     if folderPackagePath.exists {
                         type = .package
                     } else {
@@ -159,13 +161,6 @@ extension Manifest: Decodable {
                 }
             }
         }
-
-        print("----------------")
-        for ref in fileRefs {
-            print("\(ref.location) is .\(ref.type)")
-        }
-        print(fileRefs.count)
-
 
         self.fileRefs = fileRefs
     }

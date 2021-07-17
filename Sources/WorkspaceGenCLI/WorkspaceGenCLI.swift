@@ -22,7 +22,8 @@ public final class WorkspaceGenCLI {
 
 public extension WorkspaceGenCLI {
 
-    func execute(arguments: [String]? = nil) {
+    @discardableResult
+    func execute(arguments: [String]? = nil) -> Int32 {
         let status: Int32
 
         if let arguments = arguments {
@@ -31,6 +32,6 @@ public extension WorkspaceGenCLI {
             status = cli.go()
         }
 
-        exit(status)
+        return status
     }
 }
