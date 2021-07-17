@@ -2,7 +2,7 @@
 
 WorkspaceGen is command line tool that generates `<WorkspaceName>.xcworkspace/contents.xcworkspacedata` file based on `workspace.yml` manifest file.  
 
-This tool allows you to describe whole content of your Xcode workspace by providing small `workspace.yml` configuration file.  
+This tool allows you to describe whole contents of your Xcode workspace by providing small `workspace.yml` configuration file.  
 
 <br />
 
