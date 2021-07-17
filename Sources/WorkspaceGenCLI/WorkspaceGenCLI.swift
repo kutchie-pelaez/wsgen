@@ -6,7 +6,7 @@ public final class WorkspaceGenCLI {
     private lazy var cli: CLI = {
         let cli = CLI(
             name: "wsgen",
-            version: "0.0.0",
+            version: "1.0.0",
             commands: [
                 GenerateCommand()
             ]
