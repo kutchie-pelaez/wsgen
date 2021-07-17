@@ -35,10 +35,10 @@ brew install wsgen
 ## Usage
 
 All you need to do is:
-- Create `workspace.yml` somewhere in project (root of prokect would be good choise)
+- Create `workspace.yml` somewhere in project (root of project would be good choise)
 - Fill `workspace.yml` with all field you need (see [Manifest Spec](https://github.com/kulikov-ivan/wsgen/blob/master/Docs/ManifestSpec.md) for more info)
 - **[Recommended]** copy compiled version of `wsgen` to your local project
-- Run following command to generate `<WorkspaceName>.xcworkspacedata.xcworkspace/contents`
+- Run following command to generate `<WorkspaceName>.xcworkspacedata.xcworkspace/contents` file
 ```shell
 wsgen generate
 ``` 
