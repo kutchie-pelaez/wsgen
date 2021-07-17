@@ -8,13 +8,10 @@ import Yams
 final class GenerateCommand {
 
     @Param
-    var workspace_name: String
+    var input: String?
 
     @Param
-    var input_path: String?
-
-    @Param
-    var output_path: String?
+    var output: String?
 
     @Flag("-q", "--quietly", description: "Completly disable logs")
     var quietly: Bool
@@ -23,7 +20,7 @@ final class GenerateCommand {
 
     let name = "generate"
 
-    let shortDescription = "Generates xcode workspace file based on Workspacefile"
+    let shortDescription = "Generates workspace file based on provided manifest"
 }
 
 // MARK: - Command
@@ -31,51 +28,114 @@ final class GenerateCommand {
 extension GenerateCommand: Command {
 
     func execute() throws {
-        let workspacefileInputPath: Path
-        if let providedInputPath = input_path {
-            workspacefileInputPath = .init(providedInputPath)
-        } else {
-            workspacefileInputPath = .current + "Workspacefile"
+        executeNonThrowing()
+    }
+
+    private func executeNonThrowing() {
+        do {
+            let xmlData = try generatedWorkspaceData(at: inputPath)
+            let manifest = try manifest(at: inputPath)
+
+            let outputPath = outputPath(for: manifest)
+            let tmpOutputPath = outputPath.parent() + "tmp_\(outputPath.lastComponent)"
+
+            let contentsFileName = "contents.xcworkspacedata"
+            let workspaceContentsPath = outputPath + contentsFileName
+            let tmpWorkspaceContentsPath = tmpOutputPath + contentsFileName
+
+            if outputPath.exists {
+                try tmpOutputPath.mkdir()
+                try tmpWorkspaceContentsPath.write(xmlData)
+                try outputPath.delete()
+                try tmpOutputPath.move(outputPath)
+            } else {
+                try outputPath.mkdir()
+                try workspaceContentsPath.write(xmlData)
+            }
+
+            stdout("✅ Successfully generated workspace at \(outputPath)")
+        } catch let error {
+            logError(error)
         }
-
-        let decoder = YAMLDecoder()
-        let workspacefileData = try workspacefileInputPath.read()
-        let workspacefile = try decoder.decode(Workspacefile.self, from: workspacefileData)
-        let generator = WorkspaceXMLGenerator(workspacefile: workspacefile)
-        let generatedRawXMLString = try generator.generateRawStringFromWorkspacefile()
-
-        guard let xmlData = generatedRawXMLString.data(using: .utf8) else {
-            throw GenerateCommandError.invalidXMLData
-        }
-
-        let workspaceOutputPath: Path
-        if let providedOutputPath = output_path {
-            workspaceOutputPath = .init(providedOutputPath) + "\(workspace_name).xcworkspace"
-        } else {
-            workspaceOutputPath = .current + "\(workspace_name).xcworkspace"
-        }
-
-        try workspaceOutputPath.mkdir()
-        let workspaceContentsPath = workspaceOutputPath + "contents.xcworkspacedata"
-        try workspaceContentsPath.write(xmlData)
-
-        stdout("✅ Successfully generated workspace at \(workspaceOutputPath)".green)
     }
 }
 
 // MARK: - Private
 
-private extension GenerateCommand {
+extension GenerateCommand {
 
-    func stdout(_ content: String, terminator: String = "\n") {
+    private var inputPath: Path {
+        if let providedInputPath = input {
+            return .init(providedInputPath)
+        } else {
+            return .current + "workspace.yml"
+        }
+    }
+
+    private func outputPath(for manifest: Manifest) -> Path {
+        let xcworkspaceName = "\(manifest.name).xcworkspace"
+
+        if let providedOutputPath = output {
+            return .init(providedOutputPath) + xcworkspaceName
+        } else {
+            return .current + xcworkspaceName
+        }
+    }
+
+    private func manifest(at path: Path) throws -> Manifest {
+        let decoder = YAMLDecoder()
+        let manifestData = try inputPath.read()
+        let manifest = try decoder.decode(Manifest.self, from: manifestData)
+
+        return manifest
+    }
+
+    private func generatedWorkspaceData(at path: Path) throws -> Data {
+        let manifest = try manifest(at: path)
+        let generator = WorkspaceGenerator(manifest: manifest)
+        let xmlString = try generator.generateXMLString()
+
+        guard let xmlData = xmlString.data(using: .utf8) else {
+            throw GenerateCommandError.invalidXMLString
+        }
+
+        return xmlData
+    }
+
+    private func logError(_ error: Error, line: Int = #line) {
+        switch error {
+        case let generateCommandError as GenerateCommandError:
+            switch generateCommandError {
+            case .invalidXMLString:
+                stderr("Invalid XML string, \(line)")
+            }
+
+        case let workspaceGeneratorError as WorkspaceGeneratorError:
+            switch workspaceGeneratorError {
+            case .invalidXMLData:
+                stderr("Invalid XML data, \(line)")
+            }
+
+        default:
+            stderr(error.localizedDescription + ", \(line)")
+        }
+    }
+
+    private func stdout(_ content: String, terminator: String = "\n") {
         guard !quietly else { return }
 
-        stdout.print(content, terminator: terminator)
+        stdout.print(content.green, terminator: terminator)
+    }
+
+    private func stderr(_ content: String, terminator: String = "\n") {
+        guard !quietly else { return }
+
+        stderr.print(content.red, terminator: terminator)
     }
 }
 
 // MARK: - Generation errors
 
 private enum GenerateCommandError: Error {
-    case invalidXMLData
+    case invalidXMLString
 }

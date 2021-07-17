@@ -10,7 +10,7 @@ let platforms: [SupportedPlatform] = [
 
 let products: [Product] = [
     .executable(
-        name: "wksgen",
+        name: "wsgen",
         targets: [
             "WorkspaceGen"
         ]
