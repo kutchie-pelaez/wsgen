@@ -8,6 +8,10 @@ extension Manifest {
 
         let location: String
         let type: FileRefType
+
+        var name: String {
+            String(location.split(separator: "/").last ?? "")
+        }
     }
 }
 
@@ -15,8 +19,9 @@ extension Manifest {
 
 extension Manifest.FileRef {
 
-    enum FileRefType {
+    enum FileRefType: String, Decodable, CaseIterable {
         case project
+        case package
         case folder
         case file
     }
@@ -51,24 +56,3 @@ extension Manifest.FileRef: DynamicNodeEncoding {
         }
     }
 }
-
-//name: Marble
-//
-//sorting:
-//- projects
-//- folders
-//- files
-//
-//projects:
-//- products/Marble/Marble
-//
-//flatFolders:
-//- packages
-//
-//ƒolders:
-//- SomeFolder1
-//- SomeFolder2
-//
-//files:
-//- SomeFile1
-//- SomeFile2

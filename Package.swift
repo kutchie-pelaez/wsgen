@@ -45,7 +45,8 @@ let targets: [Target] = [
     .target(
         name: "Core",
         dependencies: [
-            "XMLCoder"
+            "XMLCoder",
+            "PathKit"
         ]
     ),
     .testTarget(
