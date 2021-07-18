@@ -112,8 +112,9 @@ private extension Manifest {
             result.workspaceElements.append(
                 .init(
                     location: location,
-                    type: type,
-                    domain: .group
+                    domain: .group,
+                    kind: .fileRef,
+                    type: type
                 )
             )
         }
@@ -137,8 +138,9 @@ private extension Manifest {
             result.workspaceElements.append(
                 .init(
                     location: project + ".xcodeproj",
-                    type: .project,
-                    domain: .group
+                    domain: .group,
+                    kind: .fileRef,
+                    type: .project
                 )
             )
         }
@@ -172,8 +174,9 @@ private extension Manifest {
             result.workspaceElements.append(
                 .init(
                     location: file,
-                    type: .file,
-                    domain: .group
+                    domain: .group,
+                    kind: .fileRef,
+                    type: .file
                 )
             )
         }

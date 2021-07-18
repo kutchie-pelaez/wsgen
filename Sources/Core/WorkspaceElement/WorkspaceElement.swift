@@ -1,8 +1,9 @@
 struct WorkspaceElement {
 
     let location: String
-    let type: WorkspaceElementType
     let domain: Domain
+    let kind: WorkspaceElementKind
+    let type: WorkspaceElementType
 
     var name: String {
         String(location.split(separator: "/").last ?? "")
@@ -16,6 +17,12 @@ extension WorkspaceElement {
     enum Domain: String {
         case group
     }
+}
+
+// MARK: - WorkspaceElementKind
+
+enum WorkspaceElementKind: CaseIterable {
+    case fileRef
 }
 
 // MARK: - WorkspaceElementType
