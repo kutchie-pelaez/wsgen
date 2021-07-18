@@ -19,8 +19,7 @@ private let expectedXCWorkspaceItems = [
     "RecursiveFile",
     "Folder",
     "RecursivePackage",
-    "Project",
-    "RecursiveProject"
+    "Project"
 ]
 
 // MARK: - Tests

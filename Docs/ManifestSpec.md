@@ -86,21 +86,24 @@ projects:
 #     ├── FolderA/...
 #     ├── FolderB/...
 #     ├── FolderC/...
-#     └── FolderD/...
+#     ├── FolderD/...
+#     └── FolderE/...
 #
 # you can decsribe folders value like this:
 #
 # folders:
 #   - path: Folders
 #     recursive: true
+#     exclude:
+#       - FolderC
 #
 # same as:
 #
 # folders:
 #   - Folders/FolderA
 #   - Folders/FolderB
-#   - Folders/FolderC
 #   - Folders/FolderD
+#   - Folders/FolderE
 #
 folders:
   - Folder
@@ -178,3 +181,4 @@ type: **object** or **string**
 
 > - [x] **path**: **`String`**
 > - [x] **recursive**: **`Bool`**
+> - [ ] **exclude**: **`[String]`**

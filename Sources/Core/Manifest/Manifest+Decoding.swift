@@ -76,8 +76,12 @@ private extension Manifest {
             if folder.isRecursive {
                 let children = (try? (outputPath + folder.path).children()) ?? []
 
-                for child in children {
+                recursiveFolderLoop: for child in children {
                     let childRelativePath = folder.path + "/" + child.lastComponent
+
+                    guard !folder.exclude.contains(child.lastComponentWithoutExtension) else {
+                        continue recursiveFolderLoop
+                    }
 
                     if child.extension == "xcodeproj" {
                         result.projectsNedeedToProcess.append(folder.path + "/" + child.lastComponentWithoutExtension)
@@ -87,7 +91,8 @@ private extension Manifest {
                         foldersQueue.insert(
                             .init(
                                 path: childRelativePath,
-                                isRecursive: false
+                                isRecursive: false,
+                                exclude: []
                             ),
                             at: 0
                         )

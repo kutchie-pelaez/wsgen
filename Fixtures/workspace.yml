@@ -14,6 +14,8 @@ projects:
 folders:
   - path: Recursive
     recursive: true
+    exclude:
+      - RecursiveProject
   - Folder
   - Package
 
