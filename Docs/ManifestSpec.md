@@ -71,7 +71,6 @@ projects:
   - SomeProject
   - Some/Path/To/Another/Project
 
-
 # All folders are not recursive by default
 # If you want to mark it as recursive you
 # should set recursive: true to it
@@ -118,7 +117,6 @@ files:
   - image.png
   - spec.md
 ```
-
 </details>
 
 <br/>
