@@ -49,7 +49,7 @@ root/
 name: WorkspaceName
 
 # All missing type sorting rules will be added
-# automatically, hense full list after manifest
+# automatically, hence full list after manifest
 # parsing will be:
 #
 # sorting:
