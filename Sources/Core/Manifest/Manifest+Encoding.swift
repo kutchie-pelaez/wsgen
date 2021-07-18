@@ -12,7 +12,7 @@ extension Manifest: Encodable {
         var container = encoder.container(keyedBy: CodingKeys.self)
 
         for kind in WorkspaceElementKind.allCases {
-            let workspaceElements = self.workspaceElements
+            let workspaceElements = self.sortedWorkspaceElements
                 .filter { $0.kind == kind }
 
             try container.encode(workspaceElements, forKey: kind.codingKey)

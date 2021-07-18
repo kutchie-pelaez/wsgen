@@ -25,6 +25,7 @@ extension Manifest: Decodable {
         } else {
             sorting = .default
         }
+        self.sorting = sorting
 
         let decodedFolders = (try? container.decode([Folder].self, forKey: .folders)) ?? []
         let decodedProjects = (try? container.decode([String].self, forKey: .projects)) ?? []
@@ -40,16 +41,9 @@ extension Manifest: Decodable {
             decodedFiles + foldersProcessingResult.filesNedeedToProcess
         )
 
-        var workspaceElements = foldersProcessingResult.workspaceElements +
-                                projectsProcessingResult.workspaceElements +
-                                filesProcessingResult.workspaceElements
-
-        Self.sortWorkspaceElements(
-            &workspaceElements,
-            using: sorting
-        )
-
-        self.workspaceElements = workspaceElements
+        self.workspaceElements = foldersProcessingResult.workspaceElements +
+                                 projectsProcessingResult.workspaceElements +
+                                 filesProcessingResult.workspaceElements
     }
 }
 
@@ -182,31 +176,6 @@ private extension Manifest {
         }
 
         return result
-    }
-}
-
-// MARK: - Sorting
-
-private extension Manifest {
-
-    static func sortWorkspaceElements(_ workspaceElements: inout [WorkspaceElement], using sorting: Sorting) {
-        workspaceElements.sort { first, second in
-            let rules = [
-                sorting.first,
-                sorting.second,
-                sorting.third,
-                sorting.fourth
-            ]
-
-            if first.type == second.type {
-                return first.name < second.name
-            } else {
-                let firstIndex = rules.firstIndex(of: first.type) ?? 0
-                let secondIndex = rules.firstIndex(of: second.type) ?? 0
-
-                return firstIndex < secondIndex
-            }
-        }
     }
 }
 

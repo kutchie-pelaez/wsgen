@@ -6,5 +6,6 @@ public struct Manifest {
     public let name: String
 
     // Internal
+    let sorting: Sorting
     let workspaceElements: [WorkspaceElement]
 }
