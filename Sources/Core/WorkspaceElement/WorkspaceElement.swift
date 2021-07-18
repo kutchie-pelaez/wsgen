@@ -24,12 +24,3 @@ extension WorkspaceElement {
 enum WorkspaceElementKind: CaseIterable {
     case fileRef
 }
-
-// MARK: - WorkspaceElementType
-
-enum WorkspaceElementType: String, Decodable, CaseIterable {
-    case project
-    case package
-    case folder
-    case file
-}

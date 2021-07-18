@@ -17,8 +17,10 @@ extension Manifest: Decodable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
 
+        // Decoding name
         name = try container.decode(String.self, forKey: .name)
 
+        // Decoding sorting
         let sorting: Sorting
         if let sortingTypes = try? container.decode([WorkspaceElementType].self, forKey: .sorting) {
             sorting = .init(from: sortingTypes)
@@ -27,6 +29,7 @@ extension Manifest: Decodable {
         }
         self.sorting = sorting
 
+        // Decoding workspaceElements
         let decodedFolders = (try? container.decode([Folder].self, forKey: .folders)) ?? []
         let decodedProjects = (try? container.decode([String].self, forKey: .projects)) ?? []
         let decodedFiles = (try? container.decode([String].self, forKey: .files)) ?? []
