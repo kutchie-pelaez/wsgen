@@ -2,6 +2,9 @@ public struct Manifest {
 
     public static var outputPath: String?
 
+    // Public
     public let name: String
-    let fileRefs: [FileRef]
+
+    // Internal
+    let workspaceElements: [WorkspaceElement]
 }

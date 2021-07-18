@@ -20,7 +20,7 @@ extension Manifest: Decodable {
         name = try container.decode(String.self, forKey: .name)
 
         let sorting: Sorting
-        if let sortingTypes = try? container.decode([FileRef.FileRefType].self, forKey: .sorting) {
+        if let sortingTypes = try? container.decode([WorkspaceElementType].self, forKey: .sorting) {
             sorting = .init(from: sortingTypes)
         } else {
             sorting = .default
@@ -40,16 +40,16 @@ extension Manifest: Decodable {
             decodedFiles + foldersProcessingResult.filesNedeedToProcess
         )
 
-        var fileRefs = foldersProcessingResult.fileRefs +
-                       projectsProcessingResult.fileRefs +
-                       filesProcessingResult.fileRefs
+        var workspaceElements = foldersProcessingResult.workspaceElements +
+                                projectsProcessingResult.workspaceElements +
+                                filesProcessingResult.workspaceElements
 
-        Self.sortFileRefs(
-            &fileRefs,
+        Self.sortWorkspaceElements(
+            &workspaceElements,
             using: sorting
         )
 
-        self.fileRefs = fileRefs
+        self.workspaceElements = workspaceElements
     }
 }
 
@@ -58,7 +58,7 @@ extension Manifest: Decodable {
 private extension Manifest {
 
     struct FoldersProcessingResult {
-        var fileRefs = [FileRef]()
+        var workspaceElements = [WorkspaceElement]()
         var projectsNedeedToProcess = [String]()
         var filesNedeedToProcess = [String]()
     }
@@ -74,7 +74,7 @@ private extension Manifest {
 
         while let folder = foldersQueue.popLast() {
             let location: String
-            let type: FileRef.FileRefType
+            let type: WorkspaceElementType
 
             if folder.isRecursive {
                 let children = (try? (outputPath + folder.path).children()) ?? []
@@ -109,7 +109,7 @@ private extension Manifest {
                 }
             }
 
-            result.fileRefs.append(
+            result.workspaceElements.append(
                 .init(
                     location: location,
                     type: type,
@@ -127,14 +127,14 @@ private extension Manifest {
 private extension Manifest {
 
     struct ProjectsProcessingResult {
-        var fileRefs = [FileRef]()
+        var workspaceElements = [WorkspaceElement]()
     }
 
     static func processProjects(_ projects: [String]) -> ProjectsProcessingResult {
         var result = ProjectsProcessingResult()
 
         for project in projects {
-            result.fileRefs.append(
+            result.workspaceElements.append(
                 .init(
                     location: project + ".xcodeproj",
                     type: .project,
@@ -152,7 +152,7 @@ private extension Manifest {
 private extension Manifest {
 
     struct FilesProcessingResult {
-        var fileRefs = [FileRef]()
+        var workspaceElements = [WorkspaceElement]()
     }
 
     static let ignoringFilenames = [
@@ -169,7 +169,7 @@ private extension Manifest {
             }
 
         for file in files {
-            result.fileRefs.append(
+            result.workspaceElements.append(
                 .init(
                     location: file,
                     type: .file,
@@ -186,8 +186,8 @@ private extension Manifest {
 
 private extension Manifest {
 
-    static func sortFileRefs(_ fileRefs: inout [FileRef], using sorting: Sorting) {
-        fileRefs.sort { first, second in
+    static func sortWorkspaceElements(_ workspaceElements: inout [WorkspaceElement], using sorting: Sorting) {
+        workspaceElements.sort { first, second in
             let rules = [
                 sorting.first,
                 sorting.second,

@@ -1,8 +1,8 @@
 extension Sorting {
 
-    init(from types: [FileRef.FileRefType]) {
-        var firstPart = [FileRef.FileRefType]()
-        var secondPart = FileRef.FileRefType.allCases
+    init(from types: [WorkspaceElementType]) {
+        var firstPart = [WorkspaceElementType]()
+        var secondPart = WorkspaceElementType.allCases
 
         for type in types.unique {
             secondPart.removeAll { $0 == type }
@@ -20,7 +20,7 @@ extension Sorting {
     }
 
     static var `default`: Sorting {
-        .init(from: FileRef.FileRefType.allCases)
+        .init(from: WorkspaceElementType.allCases)
     }
 }
 

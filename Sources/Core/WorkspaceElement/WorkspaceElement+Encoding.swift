@@ -8,7 +8,7 @@ private enum CodingKeys: String, CodingKey {
 
 // MARK: - Encodable
 
-extension FileRef: Encodable {
+extension WorkspaceElement: Encodable {
 
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
@@ -19,7 +19,7 @@ extension FileRef: Encodable {
 
 // MARK: - DynamicNodeEncoding
 
-extension FileRef: DynamicNodeEncoding {
+extension WorkspaceElement: DynamicNodeEncoding {
 
     static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
         let key = key as! CodingKeys

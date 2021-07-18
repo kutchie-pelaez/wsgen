@@ -11,6 +11,6 @@ extension Manifest: Encodable {
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
 
-        try container.encode(fileRefs, forKey: .fileRef)
+        try container.encode(workspaceElements, forKey: .fileRef)
     }
 }

@@ -1,14 +1,14 @@
 struct Sorting {
 
-    let first: FileRef.FileRefType
-    let second: FileRef.FileRefType
-    let third: FileRef.FileRefType
-    let fourth: FileRef.FileRefType
+    let first: WorkspaceElementType
+    let second: WorkspaceElementType
+    let third: WorkspaceElementType
+    let fourth: WorkspaceElementType
 
-    init(first: FileRef.FileRefType,
-         second: FileRef.FileRefType,
-         third: FileRef.FileRefType,
-         fourth: FileRef.FileRefType) {
+    init(first: WorkspaceElementType,
+         second: WorkspaceElementType,
+         third: WorkspaceElementType,
+         fourth: WorkspaceElementType) {
         self.first = first
         self.second = second
         self.third = third
