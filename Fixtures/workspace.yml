@@ -15,7 +15,10 @@ folders:
   - path: Recursive
     recursive: true
     exclude:
-      - RecursiveProject
+      - ExcludedProject
+      - ExcludedPackage
+      - ExcludedFolder
+      - ExcludedFile
   - Folder
   - Package
 
