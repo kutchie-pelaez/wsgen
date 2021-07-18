@@ -22,8 +22,8 @@ extension Manifest: Decodable {
 
         // Decoding sorting
         let sorting: Sorting
-        if let sortingTypes = try? container.decode([WorkspaceElementType].self, forKey: .sorting) {
-            sorting = .init(from: sortingTypes)
+        if let sortingRules = try? container.decode([String].self, forKey: .sorting) {
+            sorting = .init(from: sortingRules)
         } else {
             sorting = .default
         }

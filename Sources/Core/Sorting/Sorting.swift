@@ -1,17 +1,34 @@
 struct Sorting {
 
-    let first: WorkspaceElementType
-    let second: WorkspaceElementType
-    let third: WorkspaceElementType
-    let fourth: WorkspaceElementType
+    let rules: [Rule]
 
-    init(first: WorkspaceElementType,
-         second: WorkspaceElementType,
-         third: WorkspaceElementType,
-         fourth: WorkspaceElementType) {
-        self.first = first
-        self.second = second
-        self.third = third
-        self.fourth = fourth
+    init(rules: [Rule]) {
+        self.rules = rules
+    }
+}
+
+// MARK: - Rule
+
+extension Sorting {
+
+    enum Rule: Equatable {
+        case byType(WorkspaceElementType)
+        case byName(String)
+
+        var type: WorkspaceElementType? {
+            if case let .byType(type) = self {
+                return type
+            }
+
+            return nil
+        }
+
+        var name: String? {
+            if case let .byName(name) = self {
+                return name
+            }
+
+            return nil
+        }
     }
 }

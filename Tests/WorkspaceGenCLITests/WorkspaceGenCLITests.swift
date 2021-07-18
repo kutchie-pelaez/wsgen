@@ -13,11 +13,11 @@ private let fixturesXCWorkspaceContentsFolderPath = fixturesXCWorkspaceFolderPat
 // MARK: - Expectations
 
 private let expectedXCWorkspaceItems = [
+    "RecursiveFolder",
+    "Package",
     "File",
     "RecursiveFile",
     "Folder",
-    "RecursiveFolder",
-    "Package",
     "RecursivePackage",
     "Project",
     "RecursiveProject"

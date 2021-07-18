@@ -111,10 +111,10 @@ extension GenerateCommand {
                 stderr("Manifest output path is not set")
             }
 
-        case let workspaceElementTypeDecodingError as WorkspaceElementTypeDecodingError:
-            switch workspaceElementTypeDecodingError {
-            case .invalidValue:
-                stderr("Invalid workspace element type value")
+        case let sortingError as SortingError:
+            switch sortingError {
+            case let .noTypeRuleFound(type):
+                stderr("Sorting failed because no type rule found for type \(type)")
             }
 
         default:

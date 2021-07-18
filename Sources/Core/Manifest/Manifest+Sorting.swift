@@ -1,21 +1,24 @@
 extension Manifest {
 
     var sortedWorkspaceElements: [WorkspaceElement] {
-        workspaceElements.sorted { first, second in
-            let rules = [
-                sorting.first,
-                sorting.second,
-                sorting.third,
-                sorting.fourth
-            ]
+        get throws {
+            try workspaceElements.sorted { first, second in
+                let firstTypeRuleIndex = try sorting.typeRuleIndex(for: first.type)
+                let secondTypeRuleIndex = try sorting.typeRuleIndex(for: second.type)
 
-            if first.type == second.type {
-                return first.name < second.name
-            } else {
-                let firstIndex = rules.firstIndex(of: first.type) ?? 0
-                let secondIndex = rules.firstIndex(of: second.type) ?? 0
+                let firstNameRuleIndex = sorting.nameRuleIndex(for: first.name)
+                let secondNameRuleIndex = sorting.nameRuleIndex(for: second.name)
 
-                return firstIndex < secondIndex
+                if let firstNameRuleIndex = firstNameRuleIndex,
+                   let secondNameRuleIndex = secondNameRuleIndex {
+                    return firstNameRuleIndex < secondNameRuleIndex
+                } else if let firstNameRuleIndex = firstNameRuleIndex {
+                    return firstNameRuleIndex < secondTypeRuleIndex
+                } else if let secondNameRuleIndex = secondNameRuleIndex {
+                    return firstTypeRuleIndex < secondNameRuleIndex
+                }
+
+                return firstTypeRuleIndex < secondTypeRuleIndex
             }
         }
     }

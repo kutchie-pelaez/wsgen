@@ -1,27 +1,46 @@
 extension Sorting {
 
-    init(from types: [WorkspaceElementType]) {
-        var firstPart = [WorkspaceElementType]()
-        var secondPart = WorkspaceElementType.allCases
+    static var `default`: Sorting {
+        .init(from: WorkspaceElementType.allCases.map { $0.rawValue })
+    }
 
-        for type in types.unique {
-            secondPart.removeAll { $0 == type }
-            firstPart.append(type)
+    init(from strings: [String]) {
+        var rules = strings
+            .unique
+            .map { string -> Rule in
+                if let type = WorkspaceElementType(rawValue: string) {
+                    return .byType(type)
+                } else {
+                    return .byName(string)
+                }
+            }
+
+        for type in WorkspaceElementType.allCases {
+            if !rules.contains(where: { $0.type == type }) {
+                rules.append(.byType(type))
+            }
         }
 
-        let result = firstPart + secondPart
-
-        self = .init(
-            first: result[0],
-            second: result[1],
-            third: result[2],
-            fourth: result[3]
-        )
+        self = .init(rules: rules)
     }
 
-    static var `default`: Sorting {
-        .init(from: WorkspaceElementType.allCases)
+    func typeRuleIndex(for type: WorkspaceElementType) throws -> Int {
+        guard let ruleIndex = rules.firstIndex(where: { $0.type == type }) else {
+            throw SortingError.noTypeRuleFound(type: type.rawValue)
+        }
+
+        return ruleIndex
     }
+
+    func nameRuleIndex(for name: String) -> Int? {
+        rules.firstIndex { $0.name == name }
+    }
+}
+
+// MARK: - SortingError
+
+public enum SortingError: Error {
+    case noTypeRuleFound(type: String)
 }
 
 // MARK: - Array.unique

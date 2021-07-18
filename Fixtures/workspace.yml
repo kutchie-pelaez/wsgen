@@ -1,7 +1,8 @@
 name: WorkspaceName
 
-# Order is reversed comparing to default for test purposes
 sorting:
+  - RecursiveFolder
+  - Package
   - file
   - folder
   - package
