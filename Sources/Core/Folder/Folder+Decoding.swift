@@ -1,21 +1,13 @@
-// MARK: - Folder
+// MARK: - CodingKeys
 
-extension Manifest {
-
-    struct Folder {
-        let path: String
-        let isRecursive: Bool
-    }
+private enum CodingKeys: String, CodingKey {
+    case path
+    case recursive
 }
 
 // MARK: - Decodable
 
-extension Manifest.Folder: Decodable {
-
-    private enum CodingKeys: String, CodingKey {
-        case path
-        case recursive
-    }
+extension Folder: Decodable {
 
     init(from decoder: Decoder) throws {
         let path: String

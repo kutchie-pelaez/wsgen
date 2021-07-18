@@ -11,10 +11,12 @@ public struct WorkspaceGenerator {
     public func generateXMLString() throws -> String {
         let encoder = XMLEncoder()
         encoder.outputFormatting = .prettyPrinted
+
         let header = XMLHeader(
             version: 1.0,
             encoding: "UTF-8"
         )
+        
         let data = try encoder.encode(
             manifest,
             withRootKey: "Workspace",
