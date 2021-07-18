@@ -111,6 +111,12 @@ extension GenerateCommand {
                 stderr("Manifest output path is not set")
             }
 
+        case let workspaceElementTypeDecodingError as WorkspaceElementTypeDecodingError:
+            switch workspaceElementTypeDecodingError {
+            case .invalidValue:
+                stderr("Invalid workspace element type value")
+            }
+
         default:
             stderr(error.localizedDescription)
         }
