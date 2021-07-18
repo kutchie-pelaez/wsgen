@@ -45,7 +45,7 @@ root/
 type: **object**
 
 > - [x] **name**: **`String`** - Name of generated `.xcworkspace` directory
-> - [ ] **sorting**: [**`[SortingType]`**](#SortingType) - List of rules for sorting items in workspace after after generation. Can be configured from array from 1 to 4 [**`SortingType`**](#SortingType) values. Each group will be additionally sorted in ascending order.  
+> - [ ] **sorting**: [**`[SortingType]`**](#SortingType) - List of rules for sorting items in workspace after generation. Can be configured from array of [**`SortingType`**](#SortingType) values + custom name of your items. Each group will be additionally sorted in ascending order.  
 Default sorting will be used if not presented:
 ```yaml
 sorting:
@@ -70,7 +70,11 @@ root/
 
 ## SortingType
 
-type: **enum**
+type: **enum** or **string**
+
+> `'NameOfYourItem'`
+
+*or*
 
 > `project`  
 > `package`  
