@@ -93,14 +93,8 @@ extension GenerateCommand {
 
     private func generatedWorkspaceData(at path: Path) throws -> Data {
         let manifest = try manifest(at: path)
-        let generator = WorkspaceGenerator(manifest: manifest)
-        let xmlString = try generator.generateXMLString()
 
-        guard let xmlData = xmlString.data(using: .utf8) else {
-            throw GenerateCommandError.invalidXMLString
-        }
-
-        return xmlData
+        return try manifest.generateXMLData()
     }
 
     private func logError(_ error: Error, line: Int = #line) {
@@ -109,12 +103,6 @@ extension GenerateCommand {
             switch generateCommandError {
             case .invalidXMLString:
                 stderr("Invalid XML string, \(line)")
-            }
-
-        case let workspaceGeneratorError as WorkspaceGeneratorError:
-            switch workspaceGeneratorError {
-            case .invalidXMLData:
-                stderr("Invalid XML data, \(line)")
             }
 
         default:
