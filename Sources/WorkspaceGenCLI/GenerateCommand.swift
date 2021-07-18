@@ -28,7 +28,7 @@ final class GenerateCommand {
 extension GenerateCommand: Command {
 
     func execute() throws {
-        MANIFEST_OUTPUT_PATH = output ?? Path.current.string
+        Manifest.outputPath = output ?? Path.current.string
         executeNonThrowing()
     }
 
@@ -97,16 +97,22 @@ extension GenerateCommand {
         return try manifest.generateXMLData()
     }
 
-    private func logError(_ error: Error, line: Int = #line) {
+    private func logError(_ error: Error) {
         switch error {
         case let generateCommandError as GenerateCommandError:
             switch generateCommandError {
             case .invalidXMLString:
-                stderr("Invalid XML string, \(line)")
+                stderr("Invalid XML string")
+            }
+
+        case let manifestDecodingError as Manifest.ManifestDecodingError:
+            switch manifestDecodingError {
+            case .manifestOutputPathIsNotSet:
+                stderr("Manifest output path is not set")
             }
 
         default:
-            stderr(error.localizedDescription + ", \(line)")
+            stderr(error.localizedDescription)
         }
     }
 

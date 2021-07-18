@@ -1,8 +1,6 @@
-import PathKit
-
-public var MANIFEST_OUTPUT_PATH: String = Path.current.string
-
 public struct Manifest {
+
+    public static var outputPath: String?
 
     public let name: String
     let fileRefs: [FileRef]

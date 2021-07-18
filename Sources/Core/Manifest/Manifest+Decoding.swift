@@ -30,7 +30,7 @@ extension Manifest: Decodable {
         let decodedProjects = (try? container.decode([String].self, forKey: .projects)) ?? []
         let decodedFiles = (try? container.decode([String].self, forKey: .files)) ?? []
 
-        let foldersProcessingResult = Self.processFolders(
+        let foldersProcessingResult = try Self.processFolders(
             decodedFolders
         )
         let projectsProcessingResult = Self.processProjects(
@@ -63,7 +63,12 @@ private extension Manifest {
         var filesNedeedToProcess = [String]()
     }
 
-    static func processFolders(_ folders: [Folder]) -> FoldersProcessingResult {
+    static func processFolders(_ folders: [Folder]) throws -> FoldersProcessingResult {
+        guard let outputPathString = Self.outputPath else {
+            throw ManifestDecodingError.manifestOutputPathIsNotSet
+        }
+
+        let outputPath = Path(outputPathString)
         var foldersQueue = folders
         var result = FoldersProcessingResult()
 
@@ -72,7 +77,7 @@ private extension Manifest {
             let type: FileRef.FileRefType
 
             if folder.isRecursive {
-                let children = (try? (Path(MANIFEST_OUTPUT_PATH) + folder.path).children()) ?? []
+                let children = (try? (outputPath + folder.path).children()) ?? []
 
                 for child in children {
                     let childRelativePath = folder.path + "/" + child.lastComponent
@@ -96,7 +101,7 @@ private extension Manifest {
             } else {
                 location = folder.path
 
-                let folderPackagePath: Path = Path(MANIFEST_OUTPUT_PATH) + folder.path + "Package.swift"
+                let folderPackagePath: Path = outputPath + folder.path + "Package.swift"
                 if folderPackagePath.exists {
                     type = .package
                 } else {
@@ -196,5 +201,14 @@ private extension Manifest {
                 return firstIndex < secondIndex
             }
         }
+    }
+}
+
+// MARK: - ManifestDecodingError
+
+public extension Manifest {
+
+    enum ManifestDecodingError: Error {
+        case manifestOutputPathIsNotSet
     }
 }
