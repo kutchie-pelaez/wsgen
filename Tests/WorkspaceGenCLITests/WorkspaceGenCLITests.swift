@@ -8,7 +8,7 @@ import XMLCoder
 private let fixturesPath = Path(#file).parent().parent().parent() + "Fixtures"
 private let fixturesManifestPath = fixturesPath + "workspace.yml"
 private let fixturesXCWorkspaceFolderPath = fixturesPath + "WorkspaceName.xcworkspace"
-private let fixturesXCWorkspaceContentsFolderPath = fixturesXCWorkspaceFolderPath + "contents.xcworkspacedata"
+private let fixturesXCWorkspaceContentsFilePath = fixturesXCWorkspaceFolderPath + "contents.xcworkspacedata"
 
 // MARK: - Expectations
 
@@ -43,14 +43,14 @@ final class WorkspaceGenCLITests: XCTestCase {
     func test2_checkGeneratedXCWorkspaceExistence() {
         XCTAssert(
             fixturesXCWorkspaceFolderPath.exists &&
-            fixturesXCWorkspaceContentsFolderPath.exists
+            fixturesXCWorkspaceContentsFilePath.exists
         )
     }
 
     func test3_verifyGeneratedXCWorkspaceStructure() {
         do {
             let decoder = XMLDecoder()
-            let data = try fixturesXCWorkspaceContentsFolderPath.read()
+            let data = try fixturesXCWorkspaceContentsFilePath.read()
             let workspace = try decoder.decode(Workspace.self, from: data)
             let generatedXCWorkspaceItems = workspace
                 .fileRefs
