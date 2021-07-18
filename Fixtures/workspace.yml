@@ -1,7 +1,8 @@
 name: WorkspaceName
 
-# Order is reversed comparing to default for test purposes
 sorting:
+  - RecursiveFolder
+  - Package
   - file
   - folder
   - package
@@ -13,6 +14,11 @@ projects:
 folders:
   - path: Recursive
     recursive: true
+    exclude:
+      - ExcludedProject
+      - ExcludedPackage
+      - ExcludedFolder
+      - ExcludedFile
   - Folder
   - Package
 

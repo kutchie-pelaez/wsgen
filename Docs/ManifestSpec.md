@@ -2,6 +2,7 @@
 
 - [Manifest Spec](#manifest-spec)
   - [General](#general)
+  - [Example of full spec](#example-of-full-spec)
   - [Workspace](#workspace)
   - [SortingType](#sortingtype)
   - [Folder](#folder)
@@ -37,6 +38,89 @@ root/
 ```
 </details>
 
+<br/>
+
+## Example of full spec
+
+<details>
+<summary>Click to expand</summary>
+
+```yaml
+name: WorkspaceName
+
+# All missing type sorting rules will be added
+# automatically, hence full list after manifest
+# parsing will be:
+#
+# sorting:
+#   - NameOfItemAtVeryTop
+#   - folder
+#   - package
+#   - project
+#   - file
+#
+sorting:
+  - NameOfItemAtVeryTop
+  - folder
+  - package
+
+# Note that you should provide path to project
+# without .xcodeproj extension here
+#
+projects:
+  - SomeProject
+  - Some/Path/To/Another/Project
+
+# All folders are not recursive by default
+# If you want to mark it as recursive you
+# should set recursive: true to it
+#
+# Recursive folder will be replaced by array of
+# its items
+#
+# For given hierarchy 
+#
+# root/
+# ├── ...
+# └── Folders/
+#     ├── FolderA/...
+#     ├── FolderB/...
+#     ├── FolderC/...
+#     ├── FolderD/...
+#     └── FolderE/...
+#
+# you can decsribe folders value like this:
+#
+# folders:
+#   - path: Folders
+#     recursive: true
+#     exclude:
+#       - FolderC
+#
+# same as:
+#
+# folders:
+#   - Folders/FolderA
+#   - Folders/FolderB
+#   - Folders/FolderD
+#   - Folders/FolderE
+#
+folders:
+  - Folder
+  - Another/Folder
+  - path: Path/To/Recursive/Folder
+    recursive: true
+
+# Several files such as
+# '.DS_Store'
+# will be ignored here
+# 
+files:
+  - text.txt
+  - image.png
+  - spec.md
+```
+</details>
 
 <br/>
 
@@ -45,7 +129,7 @@ root/
 type: **object**
 
 > - [x] **name**: **`String`** - Name of generated `.xcworkspace` directory
-> - [ ] **sorting**: [**`[SortingType]`**](#SortingType) - List of rules for sorting items in workspace after after generation. Can be configured from array from 1 to 4 [**`SortingType`**](#SortingType) values. Each group will be additionally sorted in ascending order.  
+> - [ ] **sorting**: [**`[SortingType]`**](#SortingType) - List of rules for sorting items in workspace after generation. Can be configured from array of [**`SortingType`**](#SortingType) values + custom name of your items. Each group will be additionally sorted in ascending order.  
 Default sorting will be used if not presented:
 ```yaml
 sorting:
@@ -70,7 +154,11 @@ root/
 
 ## SortingType
 
-type: **enum**
+type: **enum** or **string**
+
+> `'NameOfYourItem'`
+
+*or*
 
 > `project`  
 > `package`  
@@ -93,3 +181,4 @@ type: **object** or **string**
 
 > - [x] **path**: **`String`**
 > - [x] **recursive**: **`Bool`**
+> - [ ] **exclude**: **`[String]`**

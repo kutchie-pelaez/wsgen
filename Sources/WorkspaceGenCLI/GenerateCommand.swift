@@ -28,7 +28,7 @@ final class GenerateCommand {
 extension GenerateCommand: Command {
 
     func execute() throws {
-        MANIFEST_OUTPUT_PATH = output ?? Path.current.string
+        Manifest.outputPath = output ?? Path.current.string
         executeNonThrowing()
     }
 
@@ -93,32 +93,32 @@ extension GenerateCommand {
 
     private func generatedWorkspaceData(at path: Path) throws -> Data {
         let manifest = try manifest(at: path)
-        let generator = WorkspaceGenerator(manifest: manifest)
-        let xmlString = try generator.generateXMLString()
 
-        guard let xmlData = xmlString.data(using: .utf8) else {
-            throw GenerateCommandError.invalidXMLString
-        }
-
-        return xmlData
+        return try manifest.generateXMLData()
     }
 
-    private func logError(_ error: Error, line: Int = #line) {
+    private func logError(_ error: Error) {
         switch error {
         case let generateCommandError as GenerateCommandError:
             switch generateCommandError {
             case .invalidXMLString:
-                stderr("Invalid XML string, \(line)")
+                stderr("Invalid XML string")
             }
 
-        case let workspaceGeneratorError as WorkspaceGeneratorError:
-            switch workspaceGeneratorError {
-            case .invalidXMLData:
-                stderr("Invalid XML data, \(line)")
+        case let manifestDecodingError as Manifest.ManifestDecodingError:
+            switch manifestDecodingError {
+            case .manifestOutputPathIsNotSet:
+                stderr("Manifest output path is not set")
+            }
+
+        case let sortingError as SortingError:
+            switch sortingError {
+            case let .noTypeRuleFound(type):
+                stderr("Sorting failed because no type rule found for type \(type)")
             }
 
         default:
-            stderr(error.localizedDescription + ", \(line)")
+            stderr(error.localizedDescription)
         }
     }
 
