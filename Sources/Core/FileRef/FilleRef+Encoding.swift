@@ -13,8 +13,7 @@ extension FileRef: Encodable {
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
 
-        let encodingLocation = "group:\(location)"
-        try container.encode(encodingLocation, forKey: .location)
+        try container.encode("\(domain.rawValue):\(location)", forKey: .location)
     }
 }
 

@@ -112,7 +112,8 @@ private extension Manifest {
             result.fileRefs.append(
                 .init(
                     location: location,
-                    type: type
+                    type: type,
+                    domain: .group
                 )
             )
         }
@@ -136,7 +137,8 @@ private extension Manifest {
             result.fileRefs.append(
                 .init(
                     location: project + ".xcodeproj",
-                    type: .project
+                    type: .project,
+                    domain: .group
                 )
             )
         }
@@ -170,7 +172,8 @@ private extension Manifest {
             result.fileRefs.append(
                 .init(
                     location: file,
-                    type: .file
+                    type: .file,
+                    domain: .group
                 )
             )
         }
