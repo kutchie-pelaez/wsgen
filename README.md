@@ -50,7 +50,7 @@ wsgen generate
 ## Available Commands
 
 ```shell
-wsgen generate [input_path] [output_path] [options]
+wsgen generate [input_path] [output_path] [cache_name] [options]
 ```
 
 This command will look for manifest file at provided `input_path` and generate `<WorkspaceName>.xcworkspace` folder at `output_path/<WorkspaceName>.xcworkspace` and `output_path/<WorkspaceName>.xcworkspace/contents.xcworkspacedata` file.
@@ -59,6 +59,7 @@ Arguments:
 
 - **input_path** - Path to manifest file. Default is `./workspace.yml`.
 - **output_path** - Path to root folder of generated `<WorkspaceName>.xcworkspace` folder. Default is `.`.
+- **cache_name** - Name to use for caching. Cache will be located under `~/.wsgen/<cache_name>/cache` Default is `nil`, i.e. not to use caching at all.
 
 Options:
 
