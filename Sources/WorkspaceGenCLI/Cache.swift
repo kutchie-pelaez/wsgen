@@ -4,11 +4,17 @@ import Foundation
 import PathKit
 import Yams
 
-private func cachePath(for name: String) -> Path {
-    .home + ".wsgen" + "\(name)" + "cache.json"
-}
+public final class Cache {
+    private static var cacheRootFolderPath: Path {
+        .home + ".wsgen"
+    }
+    public static func cacheDomainFolderPath(for name: String) -> Path {
+        cacheRootFolderPath + "\(name)"
+    }
+    public static func cachePath(for name: String) -> Path {
+        cacheDomainFolderPath(for: name) + "cache"
+    }
 
-final class Cache {
     init?(
         name: String?,
         configPath: Path
@@ -21,6 +27,19 @@ final class Cache {
 
     private let name: String
     private let configPath: Path
+
+    private var cachedManifestHash: String? {
+        let cachePath = Self.cachePath(for: name)
+
+        guard
+            let cacheData = try? cachePath.read(),
+            let cacheString = String(data: cacheData, encoding: .utf8)
+        else {
+            return nil
+        }
+
+        return cacheString
+    }
 
     private lazy var manifest: Manifest? = {
         let decoder = YAMLDecoder()
@@ -38,24 +57,26 @@ final class Cache {
 
     func writeGenerationResultToCache(from manifest: Manifest) throws {
         let hash = try hash(from: manifest.workspaceElements)
-        try cachePath(for: name).write(hash)
+
+        if !Self.cacheRootFolderPath.exists {
+            try Self.cacheRootFolderPath.mkdir()
+        }
+
+        if !Self.cacheDomainFolderPath(for: name).exists {
+            try Self.cacheDomainFolderPath(for: name).mkdir()
+        }
+
+        try Self.cachePath(for: name).write(hash)
     }
 
     func shouldRegenerate(using newManifest: Manifest) -> Bool {
-        guard let oldManifest = manifest else { return false }
+        guard let cachedManifestHash = cachedManifestHash else { return true }
 
-        if oldManifest != newManifest {
+        guard let newManifestHash = try? hash(from: newManifest.workspaceElements) else {
             return true
         }
 
-        guard
-            let oldManifestHash = try? hash(from: oldManifest.workspaceElements),
-            let newManifestHash = try? hash(from: newManifest.workspaceElements)
-        else {
-            return true
-        }
-
-        return oldManifestHash != newManifestHash
+        return cachedManifestHash != newManifestHash
     }
 
     private func hash(from elements: [WorkspaceElement]) throws -> String {

@@ -37,9 +37,11 @@ extension Manifest: Decodable {
         let foldersProcessingResult = try Self.processFolders(
             decodedFolders
         )
+
         let projectsProcessingResult = Self.processProjects(
             decodedProjects + foldersProcessingResult.projectsToProcess
         )
+
         let filesProcessingResult = Self.processFiles(
             decodedFiles + foldersProcessingResult.filesToProcess
         )

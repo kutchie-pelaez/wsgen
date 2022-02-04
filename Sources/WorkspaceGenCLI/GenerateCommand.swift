@@ -38,6 +38,8 @@ final class GenerateCommand {
 extension GenerateCommand: Command {
 
     func execute() throws {
+        Manifest.outputPath = output ?? Path.current.string
+
         let manifest = try manifest(at: inputPath)
 
         if let cache = cache {
@@ -47,8 +49,8 @@ extension GenerateCommand: Command {
             }
         }
 
-        Manifest.outputPath = output ?? Path.current.string
         executeNonThrowing(using: manifest)
+
         try cache?.writeGenerationResultToCache(from: manifest)
     }
 
