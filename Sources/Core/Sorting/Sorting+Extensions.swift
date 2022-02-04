@@ -37,6 +37,15 @@ extension Sorting {
     }
 }
 
+// MARK: - Equatable
+
+extension Sorting: Equatable {
+
+    public static func == (lhs: Sorting, rhs: Sorting) -> Bool {
+        lhs.rules == rhs.rules
+    }
+}
+
 // MARK: - SortingError
 
 public enum SortingError: Error {

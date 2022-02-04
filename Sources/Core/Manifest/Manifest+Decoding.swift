@@ -38,10 +38,10 @@ extension Manifest: Decodable {
             decodedFolders
         )
         let projectsProcessingResult = Self.processProjects(
-            decodedProjects + foldersProcessingResult.projectsNedeedToProcess
+            decodedProjects + foldersProcessingResult.projectsToProcess
         )
         let filesProcessingResult = Self.processFiles(
-            decodedFiles + foldersProcessingResult.filesNedeedToProcess
+            decodedFiles + foldersProcessingResult.filesToProcess
         )
 
         self.workspaceElements = foldersProcessingResult.workspaceElements +
@@ -56,8 +56,8 @@ private extension Manifest {
 
     struct FoldersProcessingResult {
         var workspaceElements = [WorkspaceElement]()
-        var projectsNedeedToProcess = [String]()
-        var filesNedeedToProcess = [String]()
+        var projectsToProcess = [String]()
+        var filesToProcess = [String]()
     }
 
     static func processFolders(_ folders: [Folder]) throws -> FoldersProcessingResult {
@@ -84,9 +84,9 @@ private extension Manifest {
                     }
 
                     if child.extension == "xcodeproj" {
-                        result.projectsNedeedToProcess.append(folder.path + "/" + child.lastComponentWithoutExtension)
+                        result.projectsToProcess.append(folder.path + "/" + child.lastComponentWithoutExtension)
                     } else if child.isFile {
-                        result.filesNedeedToProcess.append(childRelativePath)
+                        result.filesToProcess.append(childRelativePath)
                     } else if child.isDirectory {
                         foldersQueue.insert(
                             .init(

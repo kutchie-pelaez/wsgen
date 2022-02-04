@@ -1,11 +1,11 @@
-struct WorkspaceElement {
+public struct WorkspaceElement: Equatable {
 
-    let location: String
-    let domain: Domain
-    let kind: WorkspaceElementKind
-    let type: WorkspaceElementType
+    public let location: String
+    public let domain: Domain
+    public let kind: WorkspaceElementKind
+    public let type: WorkspaceElementType
 
-    var name: String {
+    public var name: String {
         String(location.split(separator: "/").last ?? "")
     }
 }
@@ -14,20 +14,20 @@ struct WorkspaceElement {
 
 extension WorkspaceElement {
 
-    enum Domain: String {
+    public enum Domain: String {
         case group
     }
 }
 
 // MARK: - WorkspaceElementKind
 
-enum WorkspaceElementKind: CaseIterable {
+public enum WorkspaceElementKind: CaseIterable {
     case fileRef
 }
 
 // MARK: - WorkspaceElementType
 
-enum WorkspaceElementType: String, Decodable, CaseIterable {
+public enum WorkspaceElementType: String, Decodable, CaseIterable {
     case project
     case package
     case folder
