@@ -21,7 +21,7 @@ extension WorkspaceElement: Encodable {
 
 extension WorkspaceElement: DynamicNodeEncoding {
 
-    static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
+    public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
         let key = key as! CodingKeys
 
         switch key {

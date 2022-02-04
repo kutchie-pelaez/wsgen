@@ -13,6 +13,9 @@ final class GenerateCommand {
     @Param
     var output: String?
 
+    @Param
+    var cacheName: String?
+
     @Flag("-q", "--quietly", description: "Completly disable logs")
     var quietly: Bool
 
@@ -21,6 +24,13 @@ final class GenerateCommand {
     let name = "generate"
 
     let shortDescription = "Generates workspace file based on provided manifest"
+    
+    // MARK: -
+    
+    private lazy var cache = Cache(
+        name: cacheName,
+        configPath: inputPath
+    )
 }
 
 // MARK: - Command
@@ -28,14 +38,23 @@ final class GenerateCommand {
 extension GenerateCommand: Command {
 
     func execute() throws {
+        let manifest = try manifest(at: inputPath)
+
+        if let cache = cache {
+            guard cache.shouldRegenerate(using: manifest) else {
+                stdout("Workspace didn't change, nothing to regenerate")
+                return
+            }
+        }
+
         Manifest.outputPath = output ?? Path.current.string
-        executeNonThrowing()
+        executeNonThrowing(using: manifest)
+        try cache?.writeGenerationResultToCache(from: manifest)
     }
 
-    private func executeNonThrowing() {
+    private func executeNonThrowing(using manifest: Manifest) {
         do {
             let xmlData = try generatedWorkspaceData(at: inputPath)
-            let manifest = try manifest(at: inputPath)
 
             let outputPath = outputPath(for: manifest)
             let tmpOutputPath = outputPath.parent() + "tmp_\(outputPath.lastComponent)"

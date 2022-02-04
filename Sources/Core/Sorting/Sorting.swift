@@ -1,4 +1,4 @@
-struct Sorting {
+public struct Sorting {
 
     let rules: [Rule]
 
