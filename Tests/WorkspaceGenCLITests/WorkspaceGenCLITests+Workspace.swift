@@ -1,9 +1,7 @@
 import XMLCoder
 
 extension WorkspaceGenCLITests {
-
     struct Workspace: Decodable, DynamicNodeDecoding {
-
         private enum CodingKeys: String, CodingKey {
             case fileRefs = "FileRef"
         }
