@@ -1,5 +1,4 @@
 extension Sorting {
-
     static var `default`: Sorting {
         .init(from: WorkspaceElementType.allCases.map { $0.rawValue })
     }
@@ -40,8 +39,7 @@ extension Sorting {
 // MARK: - Equatable
 
 extension Sorting: Equatable {
-
-    public static func == (lhs: Sorting, rhs: Sorting) -> Bool {
+    static func == (lhs: Sorting, rhs: Sorting) -> Bool {
         lhs.rules == rhs.rules
     }
 }
@@ -54,9 +52,8 @@ public enum SortingError: Error {
 
 // MARK: - Array.unique
 
-private extension Array where Element: Equatable {
-
-    var unique: [Element] {
+extension Array where Element: Equatable {
+    fileprivate var unique: [Element] {
         var result = [Element]()
 
         forEach { item in

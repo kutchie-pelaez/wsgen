@@ -1,14 +1,9 @@
-// MARK: - CodingKeys
-
-private enum CodingKeys: String, CodingKey {
-    case path
-    case recursive
-    case exclude
-}
-
-// MARK: - Decodable
-
 extension Folder: Decodable {
+    private enum CodingKeys: String, CodingKey {
+        case path
+        case recursive
+        case exclude
+    }
 
     init(from decoder: Decoder) throws {
         let path: String
@@ -28,7 +23,7 @@ extension Folder: Decodable {
             exclude = (try? container.decode([String].self, forKey: .exclude)) ?? []
         }
 
-        self = .init(
+        self = Folder(
             path: path,
             isRecursive: isRecursive,
             exclude: exclude

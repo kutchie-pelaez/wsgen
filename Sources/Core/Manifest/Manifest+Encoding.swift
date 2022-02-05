@@ -1,12 +1,7 @@
-// MARK: - CodingKeys
-
-private enum CodingKeys: String, CodingKey {
-    case fileRef = "FileRef"
-}
-
-// MARK: - Encodable
-
 extension Manifest: Encodable {
+    fileprivate enum CodingKeys: String, CodingKey {
+        case fileRef = "FileRef"
+    }
 
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
@@ -20,9 +15,8 @@ extension Manifest: Encodable {
     }
 }
 
-private extension WorkspaceElementKind {
-
-    var codingKey: CodingKeys {
+extension WorkspaceElementKind {
+    fileprivate var codingKey: Manifest.CodingKeys {
         switch self {
         case .fileRef:
             return .fileRef

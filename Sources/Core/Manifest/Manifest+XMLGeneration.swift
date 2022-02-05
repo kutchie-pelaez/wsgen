@@ -1,9 +1,8 @@
-import XMLCoder
 import Foundation
+import XMLCoder
 
-public extension Manifest {
-
-    func generateXMLData() throws -> Data {
+extension Manifest {
+    public func generateXMLData() throws -> Data {
         let encoder = XMLEncoder()
         encoder.outputFormatting = .prettyPrinted
 

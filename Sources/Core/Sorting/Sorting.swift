@@ -1,16 +1,4 @@
-public struct Sorting {
-
-    let rules: [Rule]
-
-    init(rules: [Rule]) {
-        self.rules = rules
-    }
-}
-
-// MARK: - Rule
-
-extension Sorting {
-
+struct Sorting {
     enum Rule: Equatable {
         case byType(WorkspaceElementType)
         case byName(String)
@@ -31,4 +19,6 @@ extension Sorting {
             return nil
         }
     }
+
+    let rules: [Rule]
 }

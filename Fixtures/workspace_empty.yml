@@ -1,0 +1,13 @@
+name: WorkspaceName
+
+projects:
+  - Project
+
+folders:
+  - path: Recursive
+    recursive: true
+  - Folder
+  - Package
+
+files:
+  - File

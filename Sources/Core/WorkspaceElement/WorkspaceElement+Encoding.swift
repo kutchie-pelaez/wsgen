@@ -1,14 +1,11 @@
 import XMLCoder
 
-// MARK: - CodingKeys
-
-private enum CodingKeys: String, CodingKey {
-    case location
-}
-
 // MARK: - Encodable
 
 extension WorkspaceElement: Encodable {
+    private enum CodingKeys: String, CodingKey {
+        case location
+    }
 
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
@@ -20,7 +17,6 @@ extension WorkspaceElement: Encodable {
 // MARK: - DynamicNodeEncoding
 
 extension WorkspaceElement: DynamicNodeEncoding {
-
     public static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
         let key = key as! CodingKeys
 

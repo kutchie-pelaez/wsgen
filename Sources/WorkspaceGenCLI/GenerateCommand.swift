@@ -1,12 +1,11 @@
-import Foundation
-import SwiftCLI
-import Rainbow
 import Core
+import Foundation
 import PathKit
+import Rainbow
+import SwiftCLI
 import Yams
 
 final class GenerateCommand {
-
     @Param
     var input: String?
 
@@ -24,9 +23,9 @@ final class GenerateCommand {
     let name = "generate"
 
     let shortDescription = "Generates workspace file based on provided manifest"
-    
+
     // MARK: -
-    
+
     private lazy var cache = Cache(
         name: cacheName,
         configPath: inputPath
@@ -36,7 +35,6 @@ final class GenerateCommand {
 // MARK: - Command
 
 extension GenerateCommand: Command {
-
     func execute() throws {
         Manifest.outputPath = output ?? Path.current.string
 

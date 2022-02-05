@@ -3,5 +3,5 @@ public struct Manifest: Equatable {
 
     public let name: String
     public let workspaceElements: [WorkspaceElement]
-    public let sorting: Sorting
+    let sorting: Sorting
 }

@@ -102,6 +102,8 @@ public final class Cache {
     }
 }
 
+// MARK: - CacheError
+
 enum CacheError: Error {
     case failedToGenerateCahce
 }

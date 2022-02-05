@@ -8,11 +8,17 @@ import XMLCoder
 
 private let fixturesPath = Path(#file).parent().parent().parent() + "Fixtures"
 private let fixturesManifestPath = fixturesPath + "workspace.yml"
+private let fixturesEmptyManifestPath = fixturesPath + "workspace_empty.yml"
 private let fixturesXCWorkspaceFolderPath = fixturesPath + "WorkspaceName.xcworkspace"
 private let fixturesXCWorkspaceContentsFilePath = fixturesXCWorkspaceFolderPath + "contents.xcworkspacedata"
 private let cacheName = "wsgen_tests"
 private let cacheDomainPath = Cache.cacheDomainFolderPath(for: cacheName)
 private let cachePath = Cache.cachePath(for: cacheName)
+
+private func cleanup() {
+    try? fixturesXCWorkspaceFolderPath.delete()
+    try? cacheDomainPath.delete()
+}
 
 // MARK: - Expectations
 
@@ -27,18 +33,31 @@ private let expectedXCWorkspaceItems = [
     "RecursiveProject"
 ]
 
+private let expectedXCWorkspaceItemsForEmptyManifest = [
+    "ExcludedProject",
+    "Project",
+    "RecursiveProject",
+    "ExcludedPackage",
+    "Package",
+    "RecursivePackage",
+    "ExcludedFolder",
+    "Folder",
+    "RecursiveFolder",
+    "ExcludedFile",
+    "File",
+    "RecursiveFile",
+]
+
 // MARK: - Tests
 
 final class WorkspaceGenCLITests: XCTestCase {
     override class func setUp() {
-        print("SETUP 🙂")
-        Self.cleanup()
+        cleanup()
         Manifest.outputPath = fixturesManifestPath.string
     }
 
     override class func tearDown() {
-        print("tearDown 🙂")
-        Self.cleanup()
+        cleanup()
     }
 
     func test1_executeCLI() {
@@ -46,7 +65,6 @@ final class WorkspaceGenCLITests: XCTestCase {
     }
 
     func test2_checkGeneratedXCWorkspaceExistence() {
-
         XCTAssert(
             fixturesXCWorkspaceFolderPath.exists &&
             fixturesXCWorkspaceContentsFilePath.exists
@@ -73,7 +91,7 @@ final class WorkspaceGenCLITests: XCTestCase {
     }
 
     func test5_checkExpectedCaching() {
-        Self.cleanup()
+        cleanup()
 
         XCTAssert(executionStatusWithCaching == 0)
         XCTAssertNotNil(cacheHash)
@@ -88,23 +106,43 @@ final class WorkspaceGenCLITests: XCTestCase {
         XCTAssertNotNil(newHash)
         XCTAssertEqual(oldHash, newHash )
     }
+
+    func test7_emptyManifest() {
+        XCTAssert(executionEmptyManifestStatusWithoutCaching == 0)
+
+        do {
+            let decoder = XMLDecoder()
+            let data = try fixturesXCWorkspaceContentsFilePath.read()
+            let workspace = try decoder.decode(Workspace.self, from: data)
+            let generatedXCWorkspaceItems = workspace
+                .fileRefs
+                .map { $0.name }
+
+            print(generatedXCWorkspaceItems)
+
+            XCTAssert(generatedXCWorkspaceItems == expectedXCWorkspaceItemsForEmptyManifest)
+        } catch {
+            XCTAssert(false)
+        }
+    }
 }
 
 private extension WorkspaceGenCLITests {
-    static func cleanup() {
-        try? fixturesXCWorkspaceFolderPath.delete()
-        try? cacheDomainPath.delete()
-    }
-
-    func executeCLI(useCaching: Bool) -> Int32 {
+    func executeCLI(
+        manifestPath: Path,
+        useCaching: Bool
+    ) -> Int32 {
         let cli = WorkspaceGenCLI()
+
+        let arguments = [
+            "generate",
+            manifestPath.string,
+            fixturesPath.string,
+            useCaching ? cacheName : nil
+        ].compactMap { $0 }
+
         let status = cli.execute(
-            arguments: [
-                "generate",
-                fixturesManifestPath.string,
-                fixturesPath.string,
-                useCaching ? cacheName : nil
-            ].compactMap { $0 }
+            arguments: arguments
         )
 
         return status
@@ -122,10 +160,23 @@ private extension WorkspaceGenCLITests {
     }
 
     var executionStatusWithoutCaching: Int32 {
-        executeCLI(useCaching: false)
+        executeCLI(
+            manifestPath: fixturesManifestPath,
+            useCaching: false
+        )
     }
 
     var executionStatusWithCaching: Int32 {
-        executeCLI(useCaching: true)
+        executeCLI(
+            manifestPath: fixturesManifestPath,
+            useCaching: true
+        )
+    }
+
+    var executionEmptyManifestStatusWithoutCaching: Int32 {
+        executeCLI(
+            manifestPath: fixturesEmptyManifestPath,
+            useCaching: false
+        )
     }
 }
