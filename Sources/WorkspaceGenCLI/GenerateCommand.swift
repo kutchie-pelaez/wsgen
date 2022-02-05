@@ -26,10 +26,15 @@ final class GenerateCommand {
 
     // MARK: -
 
-    private lazy var cache = Cache(
-        name: cacheName,
-        configPath: inputPath
-    )
+    private lazy var cache: Cache? = {
+        guard let manifest = try? manifest(at: inputPath) else { return nil }
+
+        return Cache(
+            name: cacheName,
+            configPath: inputPath,
+            outputPath: outputPath(for: manifest)
+        )
+    }()
 }
 
 // MARK: - Command
@@ -96,7 +101,7 @@ extension GenerateCommand {
         let xcworkspaceName = "\(manifest.name).xcworkspace"
 
         if let providedOutputPath = output {
-            return .init(providedOutputPath) + xcworkspaceName
+            return Path(providedOutputPath) + xcworkspaceName
         } else {
             return .current + xcworkspaceName
         }

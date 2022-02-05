@@ -17,16 +17,19 @@ public final class Cache {
 
     init?(
         name: String?,
-        configPath: Path
+        configPath: Path,
+        outputPath: Path
     ) {
         guard let name = name else { return nil }
 
         self.name = name
         self.configPath = configPath
+        self.outputPath = outputPath
     }
 
     private let name: String
     private let configPath: Path
+    private let outputPath: Path
 
     private var cachedManifestHash: String? {
         let cachePath = Self.cachePath(for: name)
@@ -70,7 +73,13 @@ public final class Cache {
     }
 
     func shouldRegenerate(using newManifest: Manifest) -> Bool {
-        guard let cachedManifestHash = cachedManifestHash else { return true }
+        guard outputPath.exists else {
+            return true
+        }
+
+        guard let cachedManifestHash = cachedManifestHash else {
+            return true
+        }
 
         guard let newManifestHash = try? hash(from: newManifest.workspaceElements) else {
             return true
